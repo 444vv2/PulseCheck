@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: PulseCheck API
+  version: 0.1.0
+  description: API для реєстрації користувачів, керування моніторами та перегляду результатів перевірок.
+
+servers:
+  - url: http://localhost:3001
+
+tags:
+  - name: Auth
+  - name: Monitors
+  - name: Results
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Реєстрація нового користувача
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+      responses:
+        '201':
+          description: Користувача створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          description: Email вже зареєстрований
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Логін і отримання пари токенів
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Успішний логін
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Невірний email або пароль
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Оновлення access token через refresh token
+      security:
+        - refreshCookie: []
+      responses:
+        '200':
+          description: Новий access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+
+  /monitors:
+    get:
+      tags: [Monitors]
+      summary: Список моніторів поточного користувача
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Список моніторів
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Monitor'
+                  total:
+                    type: integer
+    post:
+      tags: [Monitors]
+      summary: Створити новий монітор
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMonitorDto'
+      responses:
+        '201':
+          description: Монітор створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+
+  /monitors/{id}:
+    get:
+      tags: [Monitors]
+      summary: Деталі монітора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Монітор знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+        '404':
+          description: Не знайдено
+    patch:
+      tags: [Monitors]
+      summary: Оновити монітор (url, interval, isActive)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMonitorDto'
+      responses:
+        '200':
+          description: Оновлено
+    delete:
+      tags: [Monitors]
+      summary: Видалити монітор
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Видалено
+
+  /monitors/{id}/results:
+    get:
+      tags: [Results]
+      summary: Історія перевірок монітора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Список результатів (time-series)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PingResult'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: refreshToken
+
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+
+    CreateMonitorDto:
+      type: object
+      required: [url, intervalSec]
+      properties:
+        url:
+          type: string
+          format: uri
+        intervalSec:
+          type: integer
+          minimum: 60
+          example: 300
+
+    UpdateMonitorDto:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        intervalSec:
+          type: integer
+        isActive:
+          type: boolean
+
+    Monitor:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        intervalSec:
+          type: integer
+        isActive:
+          type: boolean
+        lastCheckedAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    PingResult:
+      type: object
+      properties:
+        monitorId:
+          type: string
+        statusCode:
+          type: integer
+          nullable: true
+        isUp:
+          type: boolean
+        responseTimeMs:
+          type: integer
+        checkedAt:
+          type: string
+          format: date-time
+        error:
+          type: string
+          nullable: true
