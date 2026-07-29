@@ -27,37 +27,3 @@ A portfolio project that demonstrates working with queues, background workers, t
 
 Detailed architecture: [`ARHITECTURE.MD`](ARHITECTURE.MD)
 API contract: [`api_contract.yaml`](api_contract.yaml)
-
-## Local launch
-
-```bash
-# 1. Start PostgreSQL
-docker compose up -d postgres
-
-# 2. Backend
-cd apps/api
-cp .env.example .env
-npm install
-npx prisma migrate deploy
-npm run dev
-```
-
-## Repository structure
-
-```
-/apps
-/web — Next.js dashboard
-/api — NestJS API (auth, CRUD, scheduler, WebSocket gateway)
-/worker — Ping worker (RabbitMQ consumer)
-/packages
-/shared-types — shared TS-types between api and worker
-ARCHITECTURE.md
-api-contract.yaml
-docker-compose.yml
-```
-
-## Why this project
-
-Portfolio project for the Full Stack Node.js Developer position — demonstrates multi-service
-architecture, distributed locks, background task processing via queues, time-series data, and
-realtime synchronization, rather than a typical CRUD application.
