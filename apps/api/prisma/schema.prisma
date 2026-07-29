@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  passwordHash   String
+  telegramChatId String?
+  createdAt      DateTime  @default(now())
+  monitors       Monitor[]
+}
+
+model Monitor {
+  id            String    @id @default(uuid())
+  url           String
+  intervalSec   Int       @default(300)
+  isActive      Boolean   @default(true)
+  lastCheckedAt DateTime?
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id])
+  createdAt     DateTime  @default(now())
+}
+
