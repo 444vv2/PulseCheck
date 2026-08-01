@@ -4,7 +4,6 @@ import {
   RabbitMQConfig,
   RabbitMQModule,
 } from '@golevelup/nestjs-rabbitmq';
-import { RabbitMqController } from './rabbitmq.controller';
 import { RabbitMqService } from './rabbitmq.service';
 
 @Module({
@@ -36,7 +35,6 @@ import { RabbitMqService } from './rabbitmq.service';
       },
     }),
   ],
-  controllers: [RabbitMqController],
   providers: [RabbitMqService],
   exports: [RabbitMQModule],
 })

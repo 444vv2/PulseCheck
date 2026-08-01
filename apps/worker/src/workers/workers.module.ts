@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { HelloWorldConsumer } from './hello-world-consumer';
+import { PingConsumer } from './ping_consumer';
 
 @Module({
   imports: [
@@ -18,6 +18,6 @@ import { HelloWorldConsumer } from './hello-world-consumer';
       }),
     }),
   ],
-  providers: [HelloWorldConsumer],
+  providers: [PingConsumer],
 })
 export class WorkerModule {}

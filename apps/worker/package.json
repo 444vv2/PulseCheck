@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "nest start --watch",
-    "start": "node dist/main"
+    "build": "nest build",
+    "start": "node dist/workers/main"
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^5.5.0",
