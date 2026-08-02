@@ -4,4 +4,6 @@ dist/
 .env.local
 coverage/
 *.log
+.next/
+CLAUDE.md
 
