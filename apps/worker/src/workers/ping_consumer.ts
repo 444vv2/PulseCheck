@@ -1,34 +1,71 @@
-import { Injectable } from '@nestjs/common';
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import axios from 'axios';
-
-interface PingMessage {
-	monitorId: string;
-	url: string;
-}
+// apps/worker/src/ping.consumer.ts
+import { Injectable, OnModuleInit } from "@nestjs/common";
+import { RabbitSubscribe } from "@golevelup/nestjs-rabbitmq";
+import mongoose from "mongoose";
+import axios from "axios";
 
 @Injectable()
-export class PingConsumer {
+export class PingConsumer implements OnModuleInit {
+  private readonly pingResultModel = mongoose.model(
+    "PingResult",
+    new mongoose.Schema({
+      monitorId: { type: String, required: true, index: true },
+      statusCode: { type: Number, default: null },
+      isUp: { type: Boolean, required: true },
+      responseTimeMs: { type: Number, required: true },
+      error: { type: String, default: null },
+      checkedAt: { type: Date, required: true, index: true },
+    }),
+  );
+
+  async onModuleInit() {
+    try {
+      await mongoose.connect(
+        process.env.MONGODB_URI ?? "mongodb://localhost:27017/pulsecheck",
+      );
+      console.log("✅ Connected to MongoDB");
+    } catch (error) {
+      console.error("❌ MongoDB connection failed:", error);
+    }
+  }
+
   @RabbitSubscribe({
-    exchange: 'pulsecheck',
-    routingKey: 'ping.check',
-    queue: 'ping_queue',
+    exchange: "pulsecheck",
+    routingKey: "ping.check",
+    queue: "ping_queue",
   })
-  async handlePing(msg: PingMessage): Promise<void> {
+  async handlePing(msg: { monitorId: string; url: string }) {
     const start = Date.now();
+    let result;
 
     try {
-      const response = await axios.get(msg.url, {
+      const res = await axios.get(msg.url, {
         timeout: 10000,
         validateStatus: () => true,
       });
-      console.log(
-        `✅ ${msg.url} (${msg.monitorId}) → ${response.status} (${Date.now() - start}ms)`,
-      );
+      result = {
+        statusCode: res.status,
+        isUp: res.status >= 200 && res.status < 400,
+        responseTimeMs: Date.now() - start,
+        error: null,
+      };
     } catch (err: any) {
-      console.log(
-        `❌ ${msg.url} (${msg.monitorId}) → ${err.message} (${Date.now() - start}ms)`,
-      );
+      result = {
+        statusCode: null,
+        isUp: false,
+        responseTimeMs: Date.now() - start,
+        error: err.message,
+      };
     }
+
+    await this.pingResultModel.create({
+      monitorId: msg.monitorId,
+      ...result,
+      checkedAt: new Date(),
+    });
+
+    console.log(
+      `✅ ${msg.url} (${msg.monitorId}) → ${result.statusCode ?? "ERR"} (${result.responseTimeMs}ms) [saved to Mongo]`,
+    );
   }
 }
