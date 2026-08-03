@@ -3,6 +3,7 @@ import { Injectable, OnModuleInit } from "@nestjs/common";
 import { RabbitSubscribe } from "@golevelup/nestjs-rabbitmq";
 import mongoose from "mongoose";
 import axios from "axios";
+import Redis from "ioredis";
 
 @Injectable()
 export class PingConsumer implements OnModuleInit {
@@ -17,6 +18,10 @@ export class PingConsumer implements OnModuleInit {
       checkedAt: { type: Date, required: true, index: true },
     }),
   );
+  private readonly Redis = new Redis({
+    host: process.env.REDIS_HOST ?? 'localhost',
+    port: parseInt(process.env.REDIS_PORT ?? '6379'),
+  });
 
   async onModuleInit() {
     try {
@@ -66,6 +71,15 @@ export class PingConsumer implements OnModuleInit {
 
     console.log(
       `✅ ${msg.url} (${msg.monitorId}) → ${result.statusCode ?? "ERR"} (${result.responseTimeMs}ms) [saved to Mongo]`,
+    );
+
+    await this.Redis.publish(
+      "monitor:results",
+      JSON.stringify({
+        monitorId: msg.monitorId,
+        ...result,
+        checkedAt: new Date().toISOString(),
+      }),
     );
   }
 }

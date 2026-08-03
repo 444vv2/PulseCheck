@@ -3,7 +3,7 @@ import { Cron } from "@nestjs/schedule";
 import Redis from "ioredis";
 import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
 import { PrismaService } from "../prisma/prisma.service";
-import { REDIS_CLIENT } from "../redis/redis.module";
+import { REDIS_CLIENT } from "../redis/redis.constant";
 
 @Injectable()
 export class SchedulerService {
