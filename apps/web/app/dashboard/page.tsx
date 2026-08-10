@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { MonitorCard } from "../../components/monitor-card";
+import { socket } from "../../lib/socket";
 
 type Monitor = {
   id: string;
@@ -10,6 +12,9 @@ type Monitor = {
   isActive: boolean;
   lastCheckedAt: string | null;
   createdAt: string;
+  lastStatusCode?: number | null;
+  lastIsUp?: boolean;
+  lastResponseTimeMs?: number;
 };
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
@@ -70,6 +75,42 @@ export default function DashboardPage() {
     setEmail(localStorage.getItem("pulsecheck.email") ?? "Гість");
     if (token) void loadMonitors();
   }, [loadMonitors]);
+
+  useEffect(() => {
+    if (!monitors.length) return;
+
+    const ids = monitors.map((m) => m.id);
+    ids.forEach((id) => socket.emit("subscribe:monitor", id));
+
+    const handleUpdate = (data: {
+      monitorId: string;
+      statusCode: number | null;
+      isUp: boolean;
+      responseTimeMs: number;
+      checkedAt: string;
+    }) => {
+      setMonitors((prev) =>
+        prev.map((m) =>
+          m.id === data.monitorId
+            ? {
+                ...m,
+                lastCheckedAt: data.checkedAt,
+                lastStatusCode: data.statusCode,
+                lastIsUp: data.isUp,
+                lastResponseTimeMs: data.responseTimeMs,
+              }
+            : m,
+        ),
+      );
+    };
+
+    socket.on("monitor:update", handleUpdate);
+
+    return () => {
+      ids.forEach((id) => socket.emit("unsubscribe:monitor", id));
+      socket.off("monitor:update", handleUpdate);
+    };
+  }, [monitors.map((m) => m.id).join(",")]);
 
   async function addMonitor(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -235,7 +276,13 @@ export default function DashboardPage() {
             {monitors.map((monitor) => (
               <article className="monitor-row" key={monitor.id}>
                 <span
-                  className={`status-dot ${monitor.isActive ? "up" : "paused"}`}
+                  className={`status-dot ${
+                    !monitor.isActive
+                      ? "paused"
+                      : monitor.lastIsUp === false
+                        ? "down"
+                        : "up"
+                  }`}
                 />
                 <div className="monitor-main">
                   <strong>{monitor.url}</strong>
@@ -244,6 +291,9 @@ export default function DashboardPage() {
                     {monitor.lastCheckedAt
                       ? `останній запит ${new Date(monitor.lastCheckedAt).toLocaleString("uk-UA")}`
                       : "ще не перевірявся"}
+                    {monitor.lastResponseTimeMs !== undefined && (
+                      <> · {monitor.lastResponseTimeMs}ms</>
+                    )}
                   </small>
                 </div>
                 <span className={`state ${monitor.isActive ? "state-up" : ""}`}>

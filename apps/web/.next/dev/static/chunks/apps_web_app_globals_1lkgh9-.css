@@ -513,6 +513,11 @@ button {
   box-shadow: 0 0 0 4px #4572621f;
 }
 
+.status-dot.down {
+  background: var(--signal);
+  box-shadow: 0 0 0 4px #ca200e1f;
+}
+
 .status-dot.paused {
   background: var(--sand);
 }
