@@ -7,11 +7,13 @@ import { RabbitMqModule } from './rabbitMQ/rabbitmq.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { RedisModule } from './redis/redis.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/pulsecheck'),
     SchedulerModule,
     RabbitMqModule,
     AuthModule,

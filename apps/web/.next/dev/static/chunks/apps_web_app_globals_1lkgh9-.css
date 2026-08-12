@@ -574,6 +574,58 @@ button {
   font-size: .9rem;
 }
 
+.activity-header {
+  margin-bottom: 2rem;
+}
+
+.activity-header h1 {
+  color: var(--ink);
+  letter-spacing: -.06em;
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.3rem);
+}
+
+.activity-header p {
+  color: var(--mist);
+  margin: .5rem 0 0;
+}
+
+.activity-controls {
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+}
+
+.activity-controls select {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid #362e2d40;
+  border-radius: 3px;
+  outline: none;
+  min-width: 16rem;
+  padding: .7rem .9rem;
+  font-size: .88rem;
+}
+
+.activity-controls select:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px #e3311d1f;
+}
+
+.chart-card {
+  background: #f7f6f1;
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.chart-empty {
+  color: var(--mist);
+  text-align: center;
+  padding: 4rem 1rem;
+  font-size: .9rem;
+}
+
 @media (max-width: 760px) {
   .auth-layout {
     grid-template-columns: 1fr;

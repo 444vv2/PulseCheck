@@ -11,7 +11,7 @@
     "cleanDistDir": true,
     "assetPrefix": "",
     "cacheMaxMemorySize": 52428800,
-    "configOrigin": "default",
+    "configOrigin": "next.config.ts",
     "useFileSystemPublicRoutes": true,
     "generateEtags": true,
     "pageExtensions": [
@@ -105,6 +105,13 @@
       }
     },
     "outputFileTracingRoot": "C:\\Users\\t1bon\\Desktop\\навчання\\PulseCheck",
+    "allowedDevOrigins": [
+      "all",
+      "192.168.0.97",
+      "localhost",
+      "127.0.0.1",
+      "172.28.16.1"
+    ],
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -220,7 +227,6 @@
       "turbopackFileSystemCacheForBuild": false,
       "turbopackInferModuleSideEffects": true,
       "turbopackPluginRuntimeStrategy": "childProcesses",
-      "middlewarePrefetch": "flexible",
       "optimizePackageImports": [
         "lucide-react",
         "date-fns",
@@ -303,7 +309,7 @@
     },
     "htmlLimitedBots": "[\\w-]+-Google|Google-[\\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight",
     "bundlePagesRouterDependencies": false,
-    "configFileName": "next.config.js",
+    "configFileName": "next.config.ts",
     "turbopack": {
       "root": "C:\\Users\\t1bon\\Desktop\\навчання\\PulseCheck"
     },

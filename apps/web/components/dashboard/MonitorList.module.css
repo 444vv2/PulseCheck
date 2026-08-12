@@ -1,0 +1,55 @@
+.list {
+  margin-top: 1rem;
+}
+.row {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto minmax(10rem, 1fr) auto auto auto;
+  align-items: center;
+  gap: 1rem;
+}
+.main {
+  min-width: 0;
+}
+.main strong {
+  color: var(--ink);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.92rem;
+}
+.main small {
+  color: var(--mist);
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+}
+.state {
+  color: var(--mist);
+  font-size: 0.75rem;
+}
+.stateActive {
+  color: #457262;
+  font-weight: 800;
+}
+.actionSlot {
+  display: contents;
+}
+.empty {
+  color: var(--mist);
+  text-align: center;
+  padding: 3rem 1rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 760px) {
+  .row {
+    grid-template-columns: auto 1fr auto;
+  }
+  .row .state,
+  .row .actionSlot {
+    display: none;
+  }
+}

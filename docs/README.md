@@ -21,7 +21,7 @@ A portfolio project that demonstrates working with queues, background workers, t
 - [x] **Phase 1 — Foundation**: NestJS + Prisma + Postgres, health-check
 - [x] **Phase 2 — Auth + Monitors CRUD**: JWT, CRUD endpoints, basic UI
 - [x] **Phase 3 — Queue and Worker**: scheduler, Redis-lock, RabbitMQ, ping worker, Mongo write
-- [ ] **Phase 4 — Realtime dashboard**: WebSocket, live updates, graphs
+- [x] **Phase 4 — Realtime dashboard**: WebSocket, live updates, graphs
 - [ ] **Phase 5 — Notifications**: email when monitor status changes
 - [ ] **Phase 6 — Tests, deployment**: unit/e2e tests, CI/CD, production deployment
 

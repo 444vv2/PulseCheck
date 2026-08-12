@@ -1,0 +1,13 @@
+.header {
+  margin-bottom: 2rem;
+}
+.header h1 {
+  color: var(--ink);
+  letter-spacing: -0.06em;
+  font-size: clamp(2rem, 3vw, 3.3rem);
+  margin: 0;
+}
+.header p {
+  color: var(--mist);
+  margin: 0.5rem 0 0;
+}

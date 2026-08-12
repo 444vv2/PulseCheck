@@ -1,0 +1,10 @@
+.card {
+  background: #f7f6f1;
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+.empty {
+  color: var(--mist);
+  text-align: center;
+  padding: 4rem 1rem;
+  font-size: 0.9rem;
+}

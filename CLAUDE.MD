@@ -34,14 +34,6 @@ implementing later phases.
 Do not introduce Phase 2+ behaviour into the Phase 1 foundation unless a task
 explicitly asks for it.
 
-## Local development
-
-1. Start PostgreSQL with `docker compose up -d postgres`.
-2. Copy `apps/api/.env.example` to `apps/api/.env`.
-3. Run `npm install`, then `npm run prisma:migrate` and `npm run dev`.
-4. Confirm `GET http://localhost:3001/health` returns the API and database
-   status.
-
 ## Conventions
 
 - Use TypeScript with NestJS modules and dependency injection.

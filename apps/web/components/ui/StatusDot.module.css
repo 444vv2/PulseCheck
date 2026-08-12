@@ -1,0 +1,16 @@
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+.up {
+  background: #457262;
+  box-shadow: 0 0 0 4px rgba(69, 114, 98, 0.12);
+}
+.down {
+  background: var(--signal);
+  box-shadow: 0 0 0 4px rgba(202, 32, 14, 0.12);
+}
+.paused {
+  background: var(--sand);
+}

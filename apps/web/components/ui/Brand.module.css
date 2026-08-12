@@ -1,0 +1,20 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+.brand span {
+  color: var(--signal);
+  font-size: 1.6rem;
+  line-height: 0.6;
+}
+.dark {
+  color: var(--ink);
+}
+.light {
+  color: #fff;
+  padding: 0 0.7rem;
+}

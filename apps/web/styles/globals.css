@@ -1,0 +1,33 @@
+:root {
+  --mist: #7c8685;
+  --sand: #aaaca1;
+  --signal: #e3311d;
+  --bark: #362e2d;
+  --ink: #050507;
+  --paper: #f1f0ea;
+  --line: rgba(170, 172, 161, 0.24);
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  background: var(--ink);
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--bark);
+  font-family: Arial, Helvetica, sans-serif;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}

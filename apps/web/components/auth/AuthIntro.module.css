@@ -1,0 +1,72 @@
+.intro {
+  background: var(--sand);
+  padding: clamp(2rem, 6vw, 6rem);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.intro::after {
+  content: "";
+  position: absolute;
+  width: 34rem;
+  height: 34rem;
+  right: -13rem;
+  bottom: -14rem;
+  border: 1px solid rgba(54, 46, 45, 0.17);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 4rem rgba(54, 46, 45, 0.04),
+    0 0 0 8rem rgba(54, 46, 45, 0.035);
+}
+.intro h1 {
+  color: var(--ink);
+  max-width: 10ch;
+  font-size: clamp(2.9rem, 5vw, 5.6rem);
+  line-height: 0.91;
+  letter-spacing: -0.075em;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+.copy {
+  max-width: 25rem;
+  color: rgba(5, 5, 7, 0.72);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 1.8rem 0 0;
+}
+.signalCard {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(241, 240, 234, 0.54);
+  border: 1px solid rgba(54, 46, 45, 0.14);
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+}
+.signalCard small {
+  color: var(--mist);
+  font-size: 0.76rem;
+  margin-top: 0.18rem;
+  display: block;
+}
+.signalDot {
+  background: var(--signal);
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(227, 49, 29, 0.13);
+}
+
+@media (max-width: 760px) {
+  .intro {
+    min-height: auto;
+    gap: 4rem;
+  }
+}

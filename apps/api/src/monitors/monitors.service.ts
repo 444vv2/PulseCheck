@@ -1,13 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Monitor } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateMonitorDto } from './dto/create-monitor.dto';
-import { ListMonitorsQueryDto } from './dto/list-monitors-query.dto';
-import { UpdateMonitorDto } from './dto/update-monitor.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Monitor } from "@prisma/client";
+import { PrismaService } from "../prisma/prisma.service";
+import { CreateMonitorDto } from "./dto/create-monitor.dto";
+import { ListMonitorsQueryDto } from "./dto/list-monitors-query.dto";
+import { UpdateMonitorDto } from "./dto/update-monitor.dto";
+import { InjectModel } from "@nestjs/mongoose";
+import { PingResult } from "./schemas/ping_result.schema";
+import { Model } from "mongoose";
 
 @Injectable()
 export class MonitorsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @InjectModel(PingResult.name)
+    private readonly pingResultModel: Model<PingResult>,
+  ) {}
 
   async findAll(
     ownerId: string,
@@ -17,7 +24,7 @@ export class MonitorsService {
     const [items, total] = await this.prisma.$transaction([
       this.prisma.monitor.findMany({
         where,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -37,7 +44,7 @@ export class MonitorsService {
     });
 
     if (!monitor) {
-      throw new NotFoundException('Monitor not found');
+      throw new NotFoundException("Monitor not found");
     }
 
     return monitor;
@@ -56,5 +63,31 @@ export class MonitorsService {
     await this.findOne(ownerId, id);
     await this.prisma.monitor.delete({ where: { id } });
   }
-}
 
+  async getPingResults(
+    ownerId: string,
+    monitorId: string,
+    from?: string,
+    to?: string,
+  ): Promise<PingResult[]> {
+    await this.findOne(ownerId, monitorId);
+
+    const query: any = { monitorId };
+
+    if (from || to) {
+      query.checkedAt = {};
+      if (from) {
+        query.checkedAt.$gte = new Date(from);
+      }
+      if (to) {
+        query.checkedAt.$lte = new Date(to);
+      }
+    }
+
+    return this.pingResultModel.
+      find(query).
+      sort({ createdAt: -1 }).
+      limit(100).
+      lean();
+  }
+}

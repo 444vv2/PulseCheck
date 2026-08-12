@@ -1,0 +1,72 @@
+.layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+}
+.panel {
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  padding: 2rem;
+}
+.form {
+  width: min(100%, 25rem);
+}
+.form h2 {
+  font-size: 2rem;
+  letter-spacing: -0.055em;
+  margin: 0;
+  color: var(--ink);
+}
+.note {
+  color: var(--mist);
+  margin: 0.65rem 0 2.1rem;
+}
+.form label {
+  display: grid;
+  gap: 0.55rem;
+  color: var(--bark);
+  font-size: 0.83rem;
+  font-weight: 700;
+  margin-top: 1.2rem;
+}
+.form input {
+  border: 1px solid rgba(54, 46, 45, 0.25);
+  background: transparent;
+  border-radius: 3px;
+  color: var(--ink);
+  outline: none;
+  padding: 0.82rem 0.9rem;
+  width: 100%;
+}
+.form input:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px rgba(227, 49, 29, 0.12);
+}
+.error {
+  color: #a32115;
+  font-size: 0.82rem;
+  margin: 0.9rem 0 0;
+}
+.submit {
+  margin-top: 1.6rem;
+}
+.switch {
+  color: var(--mist);
+  font-size: 0.86rem;
+  text-align: center;
+  margin-top: 1.4rem;
+}
+.switch a {
+  color: var(--signal);
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .panel {
+    min-height: 65vh;
+  }
+}

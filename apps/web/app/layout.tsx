@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata } from "next";
+import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: 'PulseCheck',
-  description: 'Availability monitoring for websites and APIs.',
+  title: "PulseCheck",
+  description: "Availability monitoring for websites and APIs.",
 };
 
 export default function RootLayout({
@@ -15,4 +15,3 @@ export default function RootLayout({
     </html>
   );
 }
-
