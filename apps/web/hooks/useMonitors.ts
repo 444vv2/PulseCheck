@@ -41,9 +41,7 @@ export function useMonitors(hasToken: boolean) {
       );
     } catch (reason) {
       setStatus(
-        reason instanceof Error
-          ? reason.message
-          : "Failed to load monitors.",
+        reason instanceof Error ? reason.message : "Failed to load monitors.",
       );
     }
   }, [request]);
@@ -138,6 +136,27 @@ export function useMonitors(hasToken: boolean) {
     [request, loadMonitors],
   );
 
+  const updateMonitorUrl = useCallback(
+    async (monitor: Monitor, url: string) => {
+      try {
+        await request(`/monitors/${monitor.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ url }),
+        });
+        await loadMonitors();
+        return true;
+      } catch (reason) {
+        setStatus(
+          reason instanceof Error
+            ? reason.message
+            : "Failed to update monitor URL.",
+        );
+        return false;
+      }
+    },
+    [request, loadMonitors],
+  );
+
   return {
     monitors,
     status,
@@ -145,5 +164,6 @@ export function useMonitors(hasToken: boolean) {
     addMonitor,
     toggleMonitor,
     deleteMonitor,
+    updateMonitorUrl,
   };
 }

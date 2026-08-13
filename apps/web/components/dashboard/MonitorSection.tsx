@@ -13,6 +13,7 @@ export function MonitorSection({
   onAdd,
   onToggle,
   onDelete,
+  onEditUrl,
 }: {
   monitors: Monitor[];
   status: string;
@@ -21,6 +22,7 @@ export function MonitorSection({
   onAdd: (url: string, intervalSec: number) => Promise<boolean>;
   onToggle: (monitor: Monitor) => void;
   onDelete: (id: string) => void;
+  onEditUrl: (monitor: Monitor, url: string) => Promise<boolean>;
 }) {
   return (
     <section id="monitors" className={styles.section}>
@@ -47,6 +49,7 @@ export function MonitorSection({
         hasToken={hasToken}
         onToggle={onToggle}
         onDelete={onDelete}
+        onEditUrl={onEditUrl}
       />
     </section>
   );

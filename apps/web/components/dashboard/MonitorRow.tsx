@@ -1,6 +1,7 @@
 import { Monitor } from "../../hooks/useMonitors";
 import { StatusDot } from "../ui/StatusDot";
 import { Button } from "../ui/Button";
+import { InlineEditableText } from "../ui/InlineEditableText";
 import styles from "./MonitorList.module.css";
 
 function formatInterval(seconds: number) {
@@ -16,16 +17,24 @@ export function MonitorRow({
   monitor,
   onToggle,
   onDelete,
+  onEditUrl,
 }: {
   monitor: Monitor;
   onToggle: (monitor: Monitor) => void;
   onDelete: (id: string) => void;
+  onEditUrl: (monitor: Monitor, url: string) => Promise<boolean>;
 }) {
   return (
     <article className={styles.row}>
       <StatusDot status={statusOf(monitor)} />
       <div className={styles.main}>
-        <strong>{monitor.url}</strong>
+        <InlineEditableText
+          value={monitor.url}
+          onSave={(url) => onEditUrl(monitor, url)}
+          textClassName={styles.urlText}
+          type="url"
+          aria-label={`Monitor URL: ${monitor.url}`}
+        />
         <small>
           Check every {formatInterval(monitor.intervalSec)} ·{" "}
           {monitor.lastCheckedAt

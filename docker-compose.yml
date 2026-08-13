@@ -64,6 +64,21 @@ services:
       timeout: 5s
       retries: 10
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: pulsecheck-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8025"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+# Потім написати для вебу і сервісів, які будуть використовувати ці бази даних.
+
 volumes:
   postgres_data:
   redis_data:

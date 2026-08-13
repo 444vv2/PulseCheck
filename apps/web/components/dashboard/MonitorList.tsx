@@ -7,11 +7,13 @@ export function MonitorList({
   hasToken,
   onToggle,
   onDelete,
+  onEditUrl,
 }: {
   monitors: Monitor[];
   hasToken: boolean;
   onToggle: (monitor: Monitor) => void;
   onDelete: (id: string) => void;
+  onEditUrl: (monitor: Monitor, url: string) => Promise<boolean>;
 }) {
   return (
     <div className={styles.list}>
@@ -21,6 +23,7 @@ export function MonitorList({
           monitor={monitor}
           onToggle={onToggle}
           onDelete={onDelete}
+          onEditUrl={onEditUrl}
         />
       ))}
       {hasToken && !monitors.length && (

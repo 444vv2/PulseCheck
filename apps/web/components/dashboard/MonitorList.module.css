@@ -12,12 +12,9 @@
 .main {
   min-width: 0;
 }
-.main strong {
+.urlText {
   color: var(--ink);
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-weight: 700;
   font-size: 0.92rem;
 }
 .main small {

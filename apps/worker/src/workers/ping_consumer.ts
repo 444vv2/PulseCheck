@@ -1,9 +1,9 @@
-// apps/worker/src/ping.consumer.ts
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { RabbitSubscribe } from "@golevelup/nestjs-rabbitmq";
+import { AmqpConnection, RabbitSubscribe } from "@golevelup/nestjs-rabbitmq";
 import mongoose from "mongoose";
 import axios from "axios";
 import Redis from "ioredis";
+import { PrismaClient } from "@prisma/client";
 
 @Injectable()
 export class PingConsumer implements OnModuleInit {
@@ -19,9 +19,12 @@ export class PingConsumer implements OnModuleInit {
     }),
   );
   private readonly Redis = new Redis({
-    host: process.env.REDIS_HOST ?? 'localhost',
-    port: parseInt(process.env.REDIS_PORT ?? '6379'),
+    host: process.env.REDIS_HOST ?? "localhost",
+    port: parseInt(process.env.REDIS_PORT ?? "6379"),
   });
+
+  private readonly prisma = new PrismaClient();
+  constructor(private readonly amqpConnection: AmqpConnection) {}
 
   async onModuleInit() {
     try {
@@ -80,6 +83,51 @@ export class PingConsumer implements OnModuleInit {
         ...result,
         checkedAt: new Date().toISOString(),
       }),
+    );
+
+    await this.detectStatusChangeAndNotify(msg.monitorId, msg.url, result.isUp);
+  }
+
+  private async detectStatusChangeAndNotify(
+    monitorId: string,
+    url: string,
+    currentIsUp: boolean,
+  ) {
+    const monitor = await this.prisma.monitor.findUnique({
+      where: { id: monitorId },
+      select: { lastIsUp: true, ownerId: true },
+    });
+
+    if (!monitor) return;
+
+    const previousIsUp = monitor.lastIsUp;
+
+    if (previousIsUp !== currentIsUp) {
+      await this.prisma.monitor.update({
+        where: { id: monitorId },
+        data: { lastIsUp: currentIsUp },
+      });
+    }
+
+    if (previousIsUp === null || previousIsUp === currentIsUp) return;
+
+    await this.amqpConnection.publish(
+      "pulsecheck",
+      "notification.status_changed",
+      {
+        monitorId,
+        ownerId: monitor.ownerId,
+        url,
+        previousStatus: previousIsUp,
+        currentStatus: currentIsUp,
+        checkedAt: new Date().toISOString(),
+      },
+    );
+
+    console.log(
+      `🔔 Change status ${url} (${monitorId}): ${previousIsUp ? "UP" : "DOWN"} → ${
+        currentIsUp ? "UP" : "DOWN"
+      } — notification sent`,
     );
   }
 }

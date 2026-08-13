@@ -1,0 +1,66 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.editButton {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.15rem;
+  font-size: 0.85rem;
+  color: var(--mist);
+}
+.wrapper:hover .editButton,
+.editButton:focus-visible {
+  opacity: 1;
+}
+.editButton:hover {
+  color: var(--ink);
+}
+.form {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid rgba(54, 46, 45, 0.25);
+  background: transparent;
+  border-radius: 3px;
+  color: var(--ink);
+  outline: none;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.92rem;
+}
+.input:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px rgba(227, 49, 29, 0.12);
+}
+.saveButton,
+.cancelButton {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.15rem;
+  font-size: 1rem;
+}
+.saveButton {
+  color: #457262;
+}
+.cancelButton {
+  color: var(--signal);
+}

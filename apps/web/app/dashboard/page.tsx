@@ -17,6 +17,7 @@ export default function DashboardPage() {
     addMonitor,
     toggleMonitor,
     deleteMonitor,
+    updateMonitorUrl,
   } = useMonitors(hasToken);
 
   return (
@@ -42,6 +43,7 @@ export default function DashboardPage() {
         onAdd={addMonitor}
         onToggle={toggleMonitor}
         onDelete={deleteMonitor}
+        onEditUrl={updateMonitorUrl}
       />
     </DashboardShell>
   );

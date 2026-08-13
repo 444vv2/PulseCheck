@@ -8,12 +8,15 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  email          String    @unique
-  passwordHash   String
-  telegramChatId String?
-  createdAt      DateTime  @default(now())
-  monitors       Monitor[]
+  id                       String    @id @default(uuid())
+  email                    String    @unique
+  passwordHash             String
+  telegramChatId           String?
+  telegramLinkToken        String?   @unique
+  telegramLinkTokenExpires DateTime?
+  createdAt                DateTime  @default(now())
+  monitors                 Monitor[]
+  notifications            Notification[]
 }
 
 model Monitor {
@@ -22,8 +25,35 @@ model Monitor {
   intervalSec   Int       @default(300)
   isActive      Boolean   @default(true)
   lastCheckedAt DateTime?
+  lastIsUp      Boolean?
   ownerId       String
   owner         User      @relation(fields: [ownerId], references: [id])
   createdAt     DateTime  @default(now())
+  notifications Notification[]
 }
 
+model Notification {
+  id        String             @id @default(uuid())
+  monitor   Monitor            @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  monitorId String
+  owner     User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   String
+  channel   NotificationChannel
+  status    NotificationStatus
+  message   String
+  error     String?
+  createdAt DateTime           @default(now())
+
+  @@index([ownerId, createdAt])
+  @@index([monitorId, createdAt])
+}
+
+enum NotificationChannel {
+  EMAIL
+  TELEGRAM
+}
+
+enum NotificationStatus {
+  SENT
+  FAILED
+}
