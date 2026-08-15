@@ -4,8 +4,8 @@ import * as cookieParser from "cookie-parser";
 import { AppModule } from "./app.module";
 
 function getAllowedOrigins(): string[] {
-  const configuredOrigins = (process.env.WEB_ORIGIN ?? "http://localhost:3001")
-    .split(",")
+  const configuredOrigins = process.env
+    .WEB_ORIGIN!.split(",")
     .map((origin) => origin.trim())
     .filter(Boolean);
 
@@ -41,7 +41,10 @@ async function bootstrap(): Promise<void> {
   const allowedOrigins = getAllowedOrigins();
 
   app.enableCors({
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
       if (!origin || isDevCorsPermissive() || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {

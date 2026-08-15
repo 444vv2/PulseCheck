@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
 
 export type HealthStatus = {
-  status: 'ok' | 'degraded';
-  database: 'up' | 'down';
+  status: "ok" | "degraded";
+  database: "up" | "down";
 };
 
 @Injectable()
@@ -13,10 +13,9 @@ export class HealthService {
   async check(): Promise<HealthStatus> {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
-      return { status: 'ok', database: 'up' };
+      return { status: "ok", database: "up" };
     } catch {
-      return { status: 'degraded', database: 'down' };
+      return { status: "degraded", database: "down" };
     }
   }
 }
-

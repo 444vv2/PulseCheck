@@ -4,8 +4,8 @@ import * as nodemailer from "nodemailer";
 @Injectable()
 export class EmailService {
   private readonly transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST ?? "localhost",
-    port: parseInt(process.env.SMTP_PORT ?? "1025", 10),
+    host: process.env.SMTP_HOST!,
+    port: parseInt(process.env.SMTP_PORT!, 10),
     secure: false,
   });
 
@@ -21,7 +21,7 @@ export class EmailService {
       : `${url} stopped responding at ${checkedAt}. You'll get another email when it recovers.`;
 
     await this.transporter.sendMail({
-      from: process.env.MAIL_FROM ?? "PulseCheck <alerts@pulsecheck.dev>",
+      from: process.env.MAIL_FROM!,
       to,
       subject,
       text,

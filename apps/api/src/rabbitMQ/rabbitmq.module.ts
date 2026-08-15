@@ -15,8 +15,7 @@ import { RabbitMqService } from './rabbitmq.service';
       useFactory: (configService: ConfigService): RabbitMQConfig => {
         return {
           uri:
-            configService.get<string>('RABBITMQ_URI') ??
-            'amqp://pulsecheck:pulsecheck@localhost:5672',
+            configService.get<string>('RABBITMQ_URI')!,
           exchanges: [
             {
               name: 'pulsecheck',

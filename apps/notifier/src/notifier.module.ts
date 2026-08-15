@@ -16,8 +16,7 @@ import { TelegramLinkService } from "./telegram/telegram-link.service";
       useFactory: (config: ConfigService) => ({
         exchanges: [{ name: "pulsecheck", type: "topic" }],
         uri:
-          config.get<string>("RABBITMQ_URI") ??
-          "amqp://pulsecheck:pulsecheck@localhost:5672",
+          config.get<string>("RABBITMQ_URI")!,
         connectionInitOptions: { wait: true, reject: true, timeout: 3000 },
       }),
     }),

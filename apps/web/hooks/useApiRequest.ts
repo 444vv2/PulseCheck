@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { getStoredToken } from "../lib/authStorage";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
 
 export function useApiRequest() {
   return useCallback(async (path: string, init?: RequestInit) => {

@@ -84,10 +84,10 @@ export class MonitorsService {
       }
     }
 
-    return this.pingResultModel.
-      find(query).
-      sort({ createdAt: -1 }).
-      limit(100).
-      lean();
+    return this.pingResultModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .lean();
   }
 }

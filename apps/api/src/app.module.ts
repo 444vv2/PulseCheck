@@ -14,7 +14,7 @@ import { NotificationsModule } from './notifications/notifications.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
-    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/pulsecheck'),
+    MongooseModule.forRoot(process.env.MONGO_URI!),
     SchedulerModule,
     RabbitMqModule,
     AuthModule,
