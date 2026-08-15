@@ -76,8 +76,90 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: pulsecheck-api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://pulsecheck:pulsecheck@postgres:5432/pulsecheck?schema=public
+      PORT: 3001
+      WEB_ORIGIN: http://localhost:3000
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      RABBITMQ_URI: amqp://pulsecheck:pulsecheck@rabbitmq:5672
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MONGO_URI: mongodb://mongodb:27017/pulsecheck
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
 
-# Потім написати для вебу і сервісів, які будуть використовувати ці бази даних.
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3001
+    container_name: pulsecheck-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  notifier:
+    build:
+      context: .
+      dockerfile: apps/notifier/Dockerfile
+    container_name: pulsecheck-notifier
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mailhog:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://pulsecheck:pulsecheck@postgres:5432/pulsecheck?schema=public
+      RABBITMQ_URI: amqp://pulsecheck:pulsecheck@rabbitmq:5672
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      MAIL_FROM: "PulseCheck <alerts@pulsecheck.dev>"
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    container_name: pulsecheck-worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://pulsecheck:pulsecheck@postgres:5432/pulsecheck?schema=public
+      RABBITMQ_URI: amqp://pulsecheck:pulsecheck@rabbitmq:5672
+      MONGODB_URI: mongodb://mongodb:27017/pulsecheck
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 
 volumes:
   postgres_data:

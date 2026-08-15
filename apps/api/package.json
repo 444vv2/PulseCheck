@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "nest build",
     "dev": "nest start --watch",
     "start": "node dist/main",
