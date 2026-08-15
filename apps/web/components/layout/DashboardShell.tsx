@@ -8,7 +8,7 @@ import styles from "./DashboardShell.module.css";
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { email, signOut } = useAuthSession();
+  const { email, hasToken, signOut } = useAuthSession();
 
   function handleSignOut() {
     signOut();
@@ -17,7 +17,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   return (
     <main className={styles.shell}>
-      <Sidebar email={email} onSignOut={handleSignOut} />
+      <Sidebar email={email} hasToken={hasToken} onSignOut={handleSignOut} />
       <section className={styles.content}>{children}</section>
     </main>
   );

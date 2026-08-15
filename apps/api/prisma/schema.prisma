@@ -15,6 +15,7 @@ model User {
   telegramLinkToken        String?   @unique
   telegramLinkTokenExpires DateTime?
   createdAt                DateTime  @default(now())
+  timezone                 String    @default("Europe/Kyiv")
   monitors                 Monitor[]
   notifications            Notification[]
 }

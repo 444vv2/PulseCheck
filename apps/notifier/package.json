@@ -12,9 +12,11 @@
     "start": "node dist/workers/main"
   },
   "dependencies": {
+    "node-telegram-bot-api": "^1.2.0",
     "nodemailer": "^9.0.5"
   },
   "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.64.15",
     "@types/nodemailer": "^8.0.1"
   }
 }

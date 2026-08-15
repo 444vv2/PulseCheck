@@ -113,7 +113,7 @@ export class PingConsumer implements OnModuleInit {
 
     await this.amqpConnection.publish(
       "pulsecheck",
-      "notification.status_changed",
+      "monitor.status_changed",
       {
         monitorId,
         ownerId: monitor.ownerId,

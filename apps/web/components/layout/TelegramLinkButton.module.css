@@ -1,0 +1,33 @@
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: none;
+  border: 1px solid rgba(170, 172, 161, 0.25);
+  color: var(--mist);
+  border-radius: 3px;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+}
+.button:hover:not(:disabled) {
+  color: #fff;
+  border-color: rgba(170, 172, 161, 0.4);
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--mist);
+  flex-shrink: 0;
+}
+.dotOn {
+  background: #457262;
+  box-shadow: 0 0 0 3px rgba(69, 114, 98, 0.15);
+}

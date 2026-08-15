@@ -3,18 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Brand } from "../ui/Brand";
+import { TelegramLinkButton } from "./TelegramLinkButton";
 import styles from "./Sidebar.module.css";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", icon: "⌁", label: "Dashboard" },
-  { href: "/activity", icon: "◷", label: "Activity" },
+  { href: "/dashboard", icon: "⌁", label: "Дашборд" },
+  { href: "/activity", icon: "◷", label: "Активність" },
 ];
 
 export function Sidebar({
   email,
+  hasToken,
   onSignOut,
 }: {
   email: string;
+  hasToken: boolean;
   onSignOut: () => void;
 }) {
   const pathname = usePathname();
@@ -34,12 +37,15 @@ export function Sidebar({
         ))}
       </nav>
       <div className={styles.bottom}>
-        <div className={styles.avatar}>{email.slice(0, 1).toUpperCase()}</div>
-        <div>
-          <strong>{email}</strong>
-          <button className={styles.signOutButton} onClick={onSignOut}>
-            Вийти
-          </button>
+        <TelegramLinkButton hasToken={hasToken} />
+        <div className={styles.bottomRow}>
+          <div className={styles.avatar}>{email.slice(0, 1).toUpperCase()}</div>
+          <div>
+            <strong>{email}</strong>
+            <button className={styles.signOutButton} onClick={onSignOut}>
+              Leave
+            </button>
+          </div>
         </div>
       </div>
     </aside>

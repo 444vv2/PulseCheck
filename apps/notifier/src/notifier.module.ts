@@ -2,12 +2,14 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { RabbitMQModule } from "@golevelup/nestjs-rabbitmq";
 import { StatusChangedConsumer } from "./status-changed.consumer";
-import { PrismaService } from "./prisma/prisma.service";
+import { PrismaModule } from "./prisma/prisma.module";
 import { EmailService } from "./email/email.service";
+import { TelegramLinkService } from "./telegram/telegram-link.service";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
     RabbitMQModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -20,6 +22,6 @@ import { EmailService } from "./email/email.service";
       }),
     }),
   ],
-  providers: [StatusChangedConsumer, PrismaService, EmailService],
+  providers: [StatusChangedConsumer, EmailService, TelegramLinkService],
 })
 export class NotifierModule {}

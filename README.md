@@ -11,6 +11,8 @@ PulseCheck
 │  │  │  │  │  └─ migration.sql
 │  │  │  │  ├─ 20260812115341_add_notifications
 │  │  │  │  │  └─ migration.sql
+│  │  │  │  ├─ 20260815140045_add_user_timezone
+│  │  │  │  │  └─ migration.sql
 │  │  │  │  └─ migration_lock.toml
 │  │  │  └─ schema.prisma
 │  │  ├─ src
@@ -40,6 +42,10 @@ PulseCheck
 │  │  │  │  ├─ monitors.service.ts
 │  │  │  │  └─ schemas
 │  │  │  │     └─ ping_result.schema.ts
+│  │  │  ├─ notifications
+│  │  │  │  ├─ notifications.controller.ts
+│  │  │  │  ├─ notifications.module.ts
+│  │  │  │  └─ notifications.service.ts
 │  │  │  ├─ prisma
 │  │  │  │  ├─ prisma.module.ts
 │  │  │  │  └─ prisma.service.ts
@@ -64,8 +70,13 @@ PulseCheck
 │  │  │  ├─ main.ts
 │  │  │  ├─ notifier.module.ts
 │  │  │  ├─ prisma
+│  │  │  │  ├─ prisma.module.ts
 │  │  │  │  └─ prisma.service.ts
-│  │  │  └─ status-changed.consumer.ts
+│  │  │  ├─ status-changed.consumer.ts
+│  │  │  ├─ telegram
+│  │  │  │  └─ telegram-link.service.ts
+│  │  │  └─ utils
+│  │  │     └─ format-date.ts
 │  │  └─ tsconfig.json
 │  ├─ web
 │  │  ├─ app
@@ -109,7 +120,9 @@ PulseCheck
 │  │  │  │  ├─ DashboardShell.module.css
 │  │  │  │  ├─ DashboardShell.tsx
 │  │  │  │  ├─ Sidebar.module.css
-│  │  │  │  └─ Sidebar.tsx
+│  │  │  │  ├─ Sidebar.tsx
+│  │  │  │  ├─ TelegramLinkButton.module.css
+│  │  │  │  └─ TelegramLinkButton.tsx
 │  │  │  └─ ui
 │  │  │     ├─ Brand.module.css
 │  │  │     ├─ Brand.tsx
@@ -127,7 +140,8 @@ PulseCheck
 │  │  │  ├─ useApiRequest.ts
 │  │  │  ├─ useAuthSession.ts
 │  │  │  ├─ useMonitorResults.ts
-│  │  │  └─ useMonitors.ts
+│  │  │  ├─ useMonitors.ts
+│  │  │  └─ useTelegramLink.ts
 │  │  ├─ lib
 │  │  │  ├─ authStorage.ts
 │  │  │  └─ socket.ts

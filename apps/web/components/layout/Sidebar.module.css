@@ -29,6 +29,8 @@
   border-top: 1px solid rgba(170, 172, 161, 0.2);
   margin-top: auto;
   padding: 1.2rem 0.7rem 0;
+}
+.bottomRow {
   display: flex;
   align-items: center;
   gap: 0.7rem;
@@ -43,7 +45,7 @@
   border-radius: 50%;
   font-weight: 800;
 }
-.bottom strong {
+.bottomRow strong {
   color: white;
   font-size: 0.78rem;
   display: block;
