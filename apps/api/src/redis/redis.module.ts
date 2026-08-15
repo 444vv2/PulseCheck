@@ -7,10 +7,7 @@ import { REDIS_CLIENT } from "./redis.constant";
   providers: [
     {
       provide: REDIS_CLIENT,
-      useValue: new Redis({
-        host: process.env.REDIS_HOST!,
-        port: parseInt(process.env.REDIS_PORT!),
-      }),
+      useValue: new Redis(process.env.REDIS_URL!),
     },
   ],
   exports: [REDIS_CLIENT],
