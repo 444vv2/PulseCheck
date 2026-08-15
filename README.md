@@ -1,8 +1,10 @@
 
 ```
 PulseCheck
+├─ .dockerignore
 ├─ apps
 │  ├─ api
+│  │  ├─ Dockerfile
 │  │  ├─ nest-cli.json
 │  │  ├─ package.json
 │  │  ├─ prisma
@@ -62,6 +64,7 @@ PulseCheck
 │  │  ├─ tsconfig.build.json
 │  │  └─ tsconfig.json
 │  ├─ notifier
+│  │  ├─ Dockerfile
 │  │  ├─ nest-cli.json
 │  │  ├─ package.json
 │  │  ├─ src
@@ -136,6 +139,7 @@ PulseCheck
 │  │  │     ├─ PasswordInput.tsx
 │  │  │     ├─ StatusDot.module.css
 │  │  │     └─ StatusDot.tsx
+│  │  ├─ Dockerfile
 │  │  ├─ hooks
 │  │  │  ├─ useApiRequest.ts
 │  │  │  ├─ useAuthSession.ts
@@ -148,10 +152,12 @@ PulseCheck
 │  │  ├─ next-env.d.ts
 │  │  ├─ next.config.ts
 │  │  ├─ package.json
+│  │  ├─ public
 │  │  ├─ styles
 │  │  │  └─ globals.css
 │  │  └─ tsconfig.json
 │  └─ worker
+│     ├─ Dockerfile
 │     ├─ nest-cli.json
 │     ├─ package.json
 │     ├─ src
