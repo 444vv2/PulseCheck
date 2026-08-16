@@ -56,8 +56,7 @@ PulseCheck
 │  │  │  │  └─ rabbitmq.service.ts
 │  │  │  ├─ redis
 │  │  │  │  ├─ redis.constant.ts
-│  │  │  │  ├─ redis.module.ts
-│  │  │  │  └─ redis.service.ts
+│  │  │  │  └─ redis.module.ts
 │  │  │  └─ scheduler
 │  │  │     ├─ scheduler.module.ts
 │  │  │     └─ scheduler.service.ts
@@ -167,6 +166,9 @@ PulseCheck
 │     │     └─ workers.module.ts
 │     └─ tsconfig.json
 ├─ CLAUDE.MD
+├─ database
+│  ├─ dump.sql
+│  └─ load-dump.sh
 ├─ docker-compose.yml
 ├─ docs
 │  ├─ api_contract.yaml
