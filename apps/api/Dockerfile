@@ -16,6 +16,8 @@ FROM node:20-alpine AS runner
 WORKDIR /repo
 ENV NODE_ENV=production
 
+RUN apk add --no-cache postgresql-client bash
+
 COPY --from=builder /repo/node_modules ./node_modules
 COPY --from=builder /repo/apps/api/dist ./apps/api/dist
 COPY --from=builder /repo/apps/api/package.json ./apps/api/package.json
