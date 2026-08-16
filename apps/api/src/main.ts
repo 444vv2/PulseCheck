@@ -4,8 +4,8 @@ import * as cookieParser from "cookie-parser";
 import { AppModule } from "./app.module";
 
 function getAllowedOrigins(): string[] {
-  const configuredOrigins = process.env
-    .WEB_ORIGIN!.split(",")
+  const configuredOrigins = (process.env.WEB_ORIGIN ?? "")
+    .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean);
 
