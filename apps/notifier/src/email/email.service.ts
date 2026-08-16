@@ -1,13 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import * as nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 @Injectable()
 export class EmailService {
-  private readonly transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST!,
-    port: parseInt(process.env.SMTP_PORT!, 10),
-    secure: false,
-  });
+  private readonly resend = new Resend(process.env.RESEND_API_KEY!);
 
   async sendStatusChangeEmail(
     to: string,
@@ -20,11 +16,15 @@ export class EmailService {
       ? `Good news — ${url} responded successfully again at ${checkedAt}.`
       : `${url} stopped responding at ${checkedAt}. You'll get another email when it recovers.`;
 
-    await this.transporter.sendMail({
+    const { error } = await this.resend.emails.send({
       from: process.env.MAIL_FROM!,
       to,
       subject,
       text,
     });
+
+    if (error) {
+      throw new Error(error.message);
+    }
   }
 }
