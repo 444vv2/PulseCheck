@@ -18,19 +18,14 @@ export class PingConsumer implements OnModuleInit {
       checkedAt: { type: Date, required: true, index: true },
     }),
   );
-  private readonly Redis = new Redis({
-    host: process.env.REDIS_HOST ?? "localhost",
-    port: parseInt(process.env.REDIS_PORT ?? "6379"),
-  });
+  private readonly Redis = new Redis(process.env.REDIS_URL!);
 
   private readonly prisma = new PrismaClient();
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   async onModuleInit() {
     try {
-      await mongoose.connect(
-        process.env.MONGODB_URI!,
-      );
+      await mongoose.connect(process.env.MONGO_URL!);
       console.log("✅ Connected to MongoDB");
     } catch (error) {
       console.error("❌ MongoDB connection failed:", error);
@@ -111,18 +106,14 @@ export class PingConsumer implements OnModuleInit {
 
     if (previousIsUp === null || previousIsUp === currentIsUp) return;
 
-    await this.amqpConnection.publish(
-      "pulsecheck",
-      "monitor.status_changed",
-      {
-        monitorId,
-        ownerId: monitor.ownerId,
-        url,
-        previousStatus: previousIsUp,
-        currentStatus: currentIsUp,
-        checkedAt: new Date().toISOString(),
-      },
-    );
+    await this.amqpConnection.publish("pulsecheck", "monitor.status_changed", {
+      monitorId,
+      ownerId: monitor.ownerId,
+      url,
+      previousStatus: previousIsUp,
+      currentStatus: currentIsUp,
+      checkedAt: new Date().toISOString(),
+    });
 
     console.log(
       `🔔 Change status ${url} (${monitorId}): ${previousIsUp ? "UP" : "DOWN"} → ${
