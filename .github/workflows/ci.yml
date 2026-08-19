@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: pulsecheck
+          POSTGRES_PASSWORD: pulsecheck
+          POSTGRES_DB: pulsecheck_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pulsecheck"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://pulsecheck:pulsecheck@localhost:5432/pulsecheck_test
+      JWT_SECRET: test-secret
+      JWT_REFRESH_SECRET: test-refresh-secret
+      TELEGRAM_BOT_USERNAME: pulsecheck_alerts1_bot
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Generate Prisma client
+        run: npm run prisma:generate --workspace=@pulsecheck/api
+
+      - name: Apply migrations to test DB
+        run: npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma
+
+      - name: Build — api
+        run: npm run build --workspace=@pulsecheck/api
+
+      - name: Build — worker
+        run: npm run build --workspace=worker
+
+      - name: Build — notifier
+        run: npm run build --workspace=notifier
+
+      - name: Web - Build
+        run: npm run build --workspace=web
+
+      - name: Unit tests — api
+        run: npm run test --workspace=@pulsecheck/api
+
+      - name: Unit tests — worker
+        run: npm run test --workspace=worker
+
+      - name: Unit tests — notifier
+        run: npm run test --workspace=notifier
+
+      - name: E2E tests — api
+        run: npm run test:e2e --workspace=@pulsecheck/api
