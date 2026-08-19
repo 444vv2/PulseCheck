@@ -57,7 +57,7 @@ jobs:
         run: npm run build --workspace=notifier
 
       - name: Web - Build
-        run: npm run build --workspace=web
+        run: npm run build --workspace=@pulsecheck/web
 
       - name: Unit tests — api
         run: npm run test --workspace=@pulsecheck/api
